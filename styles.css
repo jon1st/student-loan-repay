@@ -185,5 +185,6 @@ footer {
 }
 
 .num { font-variant-numeric: tabular-nums; }
+.num .real { color: var(--muted); font-size: 0.82em; margin-left: 0.15em; }
 .pos { color: var(--good); }
 .neg { color: var(--bad); }

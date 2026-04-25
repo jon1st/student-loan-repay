@@ -302,26 +302,30 @@ function render(p, loan, inv) {
   `;
 
   // --- Year by year schedule
+  // Each money cell shows: nominal £ with today's-£ (real) value in brackets.
   const sched = document.getElementById("schedule");
+  const money = (nominal, year) => {
+    const real = nominal / Math.pow(1 + p.rpi, year);
+    return `${fmt0.format(nominal)} <span class="real">(${fmt0.format(real)})</span>`;
+  };
   sched.innerHTML = `
     <thead><tr>
       <th>Yr</th><th>Tax yr (Apr)</th><th>Salary</th><th>Threshold</th>
       <th>Int. rate</th><th>Interest</th><th>Repayment</th>
-      <th>Real repay</th><th>Balance end</th><th>Cum. real</th>
+      <th>Balance end</th><th>Cumulative repaid</th>
     </tr></thead>
     <tbody>
       ${loan.rows.map(r => `
         <tr>
           <td>${r.year}</td>
           <td>${r.calYear}</td>
-          <td class="num">${fmt0.format(r.salary)}</td>
-          <td class="num">${fmt0.format(r.threshold)}</td>
+          <td class="num">${money(r.salary, r.year)}</td>
+          <td class="num">${money(r.threshold, r.year)}</td>
           <td class="num">${pct(r.interestRate)}</td>
-          <td class="num">${fmt0.format(r.interest)}</td>
-          <td class="num">${fmt0.format(r.repayment)}</td>
-          <td class="num">${fmt0.format(r.realRepayment)}</td>
-          <td class="num">${fmt0.format(r.balance)}</td>
-          <td class="num">${fmt0.format(r.cumReal)}</td>
+          <td class="num">${money(r.interest, r.year)}</td>
+          <td class="num">${money(r.repayment, r.year)}</td>
+          <td class="num">${money(r.balance, r.year)}</td>
+          <td class="num">${money(r.cumNominal, r.year)}</td>
         </tr>`).join("")}
     </tbody>`;
 

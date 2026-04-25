@@ -80,9 +80,9 @@ function readForm(form) {
   const promotions = [];
   for (let i = 1; i <= 5; i++) {
     const year = num(`promoYear${i}`);
-    const amount = num(`promoAmount${i}`);
-    if (Number.isFinite(year) && Number.isFinite(amount) && amount > 0) {
-      promotions.push({ year, amount });
+    const pct = num(`promoAmount${i}`);
+    if (Number.isFinite(year) && Number.isFinite(pct) && pct > 0) {
+      promotions.push({ year, pct: pct / 100 });
     }
   }
   return {
@@ -152,9 +152,9 @@ function projectLoan(p) {
     if (t > 0) {
       salary *= (1 + p.realWageGrowth) * (1 + p.rpi);
     }
-    // promotion bumps (up to 5, applied at the start of their named year)
+    // promotion bumps (up to 5, % uplift applied at the start of the named year)
     for (const promo of p.promotions) {
-      if (t === Math.round(promo.year)) salary += promo.amount;
+      if (t === Math.round(promo.year)) salary *= 1 + promo.pct;
     }
 
     // 2. Threshold uprating

@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>UK Student Loan: Pay Off vs Invest Calculator</title>
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<header>
+  <h1>Should I pay off my UK student loan?</h1>
+  <p class="lede">
+    Models your loan year-by-year against investing the same lump sum.
+    Handles Plans 1, 2, 4, 5 and Postgraduate. Edit any assumption and the
+    workings update.
+  </p>
+</header>
+
+<main>
+  <form id="inputs" autocomplete="off">
+
+    <section>
+      <h2>1. Your loan</h2>
+      <div class="grid">
+        <label>Plan type
+          <select name="plan" id="plan">
+            <option value="plan1">Plan 1 (Eng/Wales pre-Sep 2012, NI)</option>
+            <option value="plan2" selected>Plan 2 (Eng/Wales Sep 2012 &ndash; Jul 2023)</option>
+            <option value="plan4">Plan 4 (Scotland from 1998)</option>
+            <option value="plan5">Plan 5 (England from Aug 2023)</option>
+            <option value="postgrad">Postgraduate Loan</option>
+          </select>
+        </label>
+        <label>Current balance (&pound;)
+          <input type="number" name="balance" value="45000" min="0" step="100" />
+        </label>
+        <label>Year first liable to repay (April&hellip;)
+          <input type="number" name="firstRepayYear" value="2024" min="1990" max="2050" step="1" />
+          <small>April after graduation, or April 4 yrs after course start &mdash; whichever is later.</small>
+        </label>
+        <label>Current age
+          <input type="number" name="age" value="28" min="16" max="80" step="1" />
+          <small>Used for Plan 1 age-65 cancellation only.</small>
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Income</h2>
+      <div class="grid">
+        <label>Current gross salary (&pound;)
+          <input type="number" name="salary" value="40000" min="0" step="500" />
+        </label>
+        <label>Real wage growth (% above inflation, p.a.)
+          <input type="number" name="realWageGrowth" value="1.5" step="0.1" />
+        </label>
+        <label>One-off promotion bump in year +N (&pound;)
+          <input type="number" name="promoAmount" value="0" step="500" />
+        </label>
+        <label>&hellip;applied N years from now
+          <input type="number" name="promoYear" value="3" min="0" max="40" step="1" />
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h2>3. Economy</h2>
+      <div class="grid">
+        <label>Long-run RPI (% p.a.)
+          <input type="number" name="rpi" value="3.0" step="0.1" />
+        </label>
+        <label>Long-run CPI (% p.a.)
+          <input type="number" name="cpi" value="2.0" step="0.1" />
+        </label>
+        <label>Long-run BoE base rate (% p.a.)
+          <input type="number" name="boe" value="3.5" step="0.1" />
+          <small>Used by Plans 1 &amp; 4 (interest = lower of RPI or base+1%).</small>
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. Government policy</h2>
+      <div class="grid">
+        <label>Threshold uprating
+          <select name="thresholdPolicy">
+            <option value="frozen" selected>Frozen until freeze-end year, then CPI</option>
+            <option value="cpi">CPI each year</option>
+            <option value="rpi">RPI each year</option>
+            <option value="custom">Custom %</option>
+            <option value="freezeForever">Frozen forever</option>
+          </select>
+        </label>
+        <label>Threshold freeze ends (April&hellip;)
+          <input type="number" name="freezeEnd" value="2027" min="2024" max="2050" step="1" />
+        </label>
+        <label>Custom threshold uprating (% p.a.)
+          <input type="number" name="thresholdCustom" value="2.0" step="0.1" />
+        </label>
+        <label>Plan 2 Prevailing Market Rate cap (% p.a.)
+          <input type="number" name="pmrCap" value="7.3" step="0.1" />
+          <small>Hard cap on Plan 2 interest if RPI spikes.</small>
+        </label>
+      </div>
+    </section>
+
+    <section>
+      <h2>5. Alternative investment</h2>
+      <div class="grid">
+        <label>Lump sum available (&pound;)
+          <input type="number" name="lumpSum" value="45000" min="0" step="100" />
+        </label>
+        <label>Expected nominal return (% p.a.)
+          <input type="number" name="invReturn" value="7.0" step="0.1" />
+        </label>
+        <label>Investment fees (% p.a.)
+          <input type="number" name="invFees" value="0.25" step="0.05" />
+        </label>
+        <label>Tax wrapper
+          <select name="wrapper">
+            <option value="isa" selected>ISA / SIPP drawdown (tax-free growth)</option>
+            <option value="gia">General Investment Account (CGT on gains)</option>
+          </select>
+        </label>
+        <label>CGT rate on withdrawal (%)
+          <input type="number" name="cgt" value="24" step="1" />
+          <small>Only used for the GIA option.</small>
+        </label>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button type="submit">Calculate</button>
+      <button type="reset">Reset to defaults</button>
+    </div>
+  </form>
+
+  <section id="results" hidden>
+    <h2>Recommendation</h2>
+    <div id="recommendation" class="recommendation"></div>
+
+    <h3>Summary</h3>
+    <table id="summary" class="summary"></table>
+
+    <h3>Assumptions used</h3>
+    <table id="assumptions" class="summary"></table>
+
+    <h3>Year-by-year loan projection</h3>
+    <p class="hint">All cash flows in nominal &pound; unless marked &ldquo;real&rdquo; (today&rsquo;s &pound;, deflated by RPI).</p>
+    <div class="tablewrap">
+      <table id="schedule"></table>
+    </div>
+
+    <h3>Invested lump sum projection</h3>
+    <div class="tablewrap">
+      <table id="investment"></table>
+    </div>
+
+    <h3>How it works</h3>
+    <div id="explainer"></div>
+  </section>
+</main>
+
+<footer>
+  <p>
+    Educational tool. Loan rules are simplified to annual steps; HMRC/SLC use
+    daily interest and PAYE-month thresholds. Always check official rates and
+    take regulated advice for material decisions.
+  </p>
+</footer>
+
+<script src="calculator.js"></script>
+</body>
+</html>

@@ -54,12 +54,30 @@
         <label>Real wage growth (% above inflation, p.a.)
           <input type="number" name="realWageGrowth" value="1.5" step="0.1" />
         </label>
-        <label>One-off promotion bump in year +N (&pound;)
-          <input type="number" name="promoAmount" value="0" step="500" />
-        </label>
-        <label>&hellip;applied N years from now
-          <input type="number" name="promoYear" value="3" min="0" max="40" step="1" />
-        </label>
+      </div>
+      <h3 class="subhead">Promotion &amp; bump (up to 5)</h3>
+      <p class="hint">Optional one-off salary uplifts in specific future years. Leave a bump at 0 to skip a slot.</p>
+      <div class="promo-list">
+        <div class="promo-row">
+          <label>Year (+N from now)<input type="number" name="promoYear1" value="3" min="0" max="40" step="1" /></label>
+          <label>Bump (&pound;)<input type="number" name="promoAmount1" value="0" step="500" /></label>
+        </div>
+        <div class="promo-row">
+          <label>Year (+N from now)<input type="number" name="promoYear2" value="6" min="0" max="40" step="1" /></label>
+          <label>Bump (&pound;)<input type="number" name="promoAmount2" value="0" step="500" /></label>
+        </div>
+        <div class="promo-row">
+          <label>Year (+N from now)<input type="number" name="promoYear3" value="10" min="0" max="40" step="1" /></label>
+          <label>Bump (&pound;)<input type="number" name="promoAmount3" value="0" step="500" /></label>
+        </div>
+        <div class="promo-row">
+          <label>Year (+N from now)<input type="number" name="promoYear4" value="15" min="0" max="40" step="1" /></label>
+          <label>Bump (&pound;)<input type="number" name="promoAmount4" value="0" step="500" /></label>
+        </div>
+        <div class="promo-row">
+          <label>Year (+N from now)<input type="number" name="promoYear5" value="20" min="0" max="40" step="1" /></label>
+          <label>Bump (&pound;)<input type="number" name="promoAmount5" value="0" step="500" /></label>
+        </div>
       </div>
     </section>
 

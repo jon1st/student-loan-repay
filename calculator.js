@@ -77,6 +77,14 @@ const pct = (v) => (v * 100).toFixed(2) + "%";
 function readForm(form) {
   const f = new FormData(form);
   const num = (k) => parseFloat(f.get(k));
+  const promotions = [];
+  for (let i = 1; i <= 5; i++) {
+    const year = num(`promoYear${i}`);
+    const amount = num(`promoAmount${i}`);
+    if (Number.isFinite(year) && Number.isFinite(amount) && amount > 0) {
+      promotions.push({ year, amount });
+    }
+  }
   return {
     plan: f.get("plan"),
     balance: num("balance"),
@@ -84,8 +92,7 @@ function readForm(form) {
     age: num("age"),
     salary: num("salary"),
     realWageGrowth: num("realWageGrowth") / 100,
-    promoAmount: num("promoAmount"),
-    promoYear: num("promoYear"),
+    promotions,
     rpi: num("rpi") / 100,
     cpi: num("cpi") / 100,
     boe: num("boe") / 100,
@@ -145,8 +152,10 @@ function projectLoan(p) {
     if (t > 0) {
       salary *= (1 + p.realWageGrowth) * (1 + p.rpi);
     }
-    // promotion bump
-    if (t === Math.round(p.promoYear)) salary += p.promoAmount;
+    // promotion bumps (up to 5, applied at the start of their named year)
+    for (const promo of p.promotions) {
+      if (t === Math.round(promo.year)) salary += promo.amount;
+    }
 
     // 2. Threshold uprating
     if (t > 0) {

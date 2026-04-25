@@ -186,5 +186,25 @@ footer {
 
 .num { font-variant-numeric: tabular-nums; }
 .num .real { color: var(--muted); font-size: 0.82em; margin-left: 0.15em; }
+
+.subhead {
+  margin: 1.25rem 0 0.25rem !important;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+.promo-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 0.5rem 1rem;
+  margin-top: 0.5rem;
+}
+.promo-row {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 0.5rem;
+  align-items: end;
+}
 .pos { color: var(--good); }
 .neg { color: var(--bad); }
